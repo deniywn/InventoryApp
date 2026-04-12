@@ -1,5 +1,6 @@
 ﻿using InventoryApp.Controllers;
 using InventoryApp.Data;
+using InventoryApp.Forms;
 using InventoryApp.Models;
 using InventoryApp.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,57 +15,43 @@ static class Program
     {
         ApplicationConfiguration.Initialize();
 
+        // ── 1. Baca connection string dari appsettings.json ──
         var config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
+        var connectionString =
+            config.GetConnectionString("DefaultConnection")!;
+
+        // ── 2. Buat DbContext ────────────────────────────────
         var options = new DbContextOptionsBuilder<InventoryDbContext>()
-            .UseSqlServer(config.GetConnectionString("DefaultConnection"))
+            .UseSqlServer(connectionString)
             .Options;
 
-        using var context = new InventoryDbContext(options);
+        var context = new InventoryDbContext(options);
 
+        // ── 3. Jalankan migration otomatis ───────────────────
+        // Database dibuat/diperbarui otomatis setiap kali app dijalankan
+        context.Database.Migrate();
+
+        // ── 4. Buat semua Repository ─────────────────────────
         var productRepo = new ProductRepository(context);
         var categoryRepo = new CategoryRepository(context);
-        var controller = new ProductController(productRepo, categoryRepo);
+        var transactionRepo = new TransactionRepository(context);
 
-        // ── TEST 1: tambah produk valid ──────────────────────
-        var produkBaru = new Product
-        {
-            Name = "Laptop Test",
-            SKU = "LPT-001",
-            Price = 8500000,
-            Stock = 10,
-            MinStock = 2,
-            CategoryId = 1   // kategori Elektronik dari seed data
-        };
+        // ── 5. Buat semua Controller ─────────────────────────
+        var productCtrl = new ProductController(productRepo, categoryRepo);
+        var categoryCtrl = new CategoryController(categoryRepo);
+        var transactionCtrl = new TransactionController(transactionRepo, productRepo);
 
-        var hasil1 = controller.Create(produkBaru);
-        MessageBox.Show(
-            $"Test 1 — Tambah produk valid:\n\n" +
-            $"Berhasil : {hasil1.Success}\n" +
-            $"Pesan    : {hasil1.Message}",
-            "Verifikasi Controller",
-            MessageBoxButtons.OK,
-            hasil1.Success ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+        // ── 6. Buat MainForm dan inject Controller ───────────
+        var mainForm = new MainForm(productCtrl, categoryCtrl, transactionCtrl);
 
-        // ── TEST 2: tambah produk dengan nama kosong ─────────
-        var produkKosong = new Product
-        {
-            Name = "",   // sengaja kosong — harus ditolak
-            SKU = "XXX",
-            Price = 100,
-            CategoryId = 1
-        };
+        // ── 7. Jalankan aplikasi ─────────────────────────────
+        Application.Run(mainForm);
 
-        var hasil2 = controller.Create(produkKosong);
-        MessageBox.Show(
-            $"Test 2 — Nama produk kosong (harus ditolak):\n\n" +
-            $"Berhasil : {hasil2.Success}\n" +
-            $"Pesan    : {hasil2.Message}",
-            "Verifikasi Controller",
-            MessageBoxButtons.OK,
-            hasil2.Success ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+        // Tutup DbContext saat aplikasi ditutup
+        context.Dispose();
     }
 }
