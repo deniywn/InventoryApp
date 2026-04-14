@@ -31,9 +31,16 @@ public partial class MainForm : Form
     //2.1 Klik menu "Products
     private void productsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetStatus("Membuka halaman Products...");
-        MessageBox.Show( "ProductForm akan dibuat di Tahap 7.","Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        SetStatus("Halaman Products");
+
+        // Buka ProductForm dan inject controller yang sudah ada
+        var form = new ProductForm(_productController);
+        form.MdiParent = null;  // buka sebagai jendela terpisah
+        form.ShowDialog(this);  // "this" = MainForm sebagai parent
+
+        SetStatus("Siap.");
     }
+
     //2.2 Klik menu "Categories"
     private void categoriesToolStripMenuItem_Click(object sender, EventArgs e)
     {

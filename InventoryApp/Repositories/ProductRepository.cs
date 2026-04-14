@@ -39,6 +39,12 @@ public class ProductRepository : IProductRepository
 
     public void Update(Product product)
     {
+        //notracking agar tidak terjadi error "The instance of entity type 'Product' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked."
+        var tracked = _context.ChangeTracker.Entries<Product>()
+            .FirstOrDefault(e => e.Entity.Id == product.Id);
+        if (tracked != null)
+            tracked.State = EntityState.Detached;
+
         product.UpdatedAt = DateTime.Now;
         _context.Products.Update(product);
         _context.SaveChanges();
@@ -46,6 +52,11 @@ public class ProductRepository : IProductRepository
 
     public void Delete(int id)
     {
+        var tracked = _context.ChangeTracker.Entries<Product>()
+            .FirstOrDefault(e => e.Entity.Id == id);
+        if (tracked != null)
+            tracked.State = EntityState.Detached;
+
         var product = _context.Products.Find(id);
         if (product == null)
             throw new InvalidOperationException(
@@ -78,4 +89,5 @@ public class ProductRepository : IProductRepository
         return _context.Products
             .Any(p => p.SKU == sku && p.Id != excludeId);
     }
+
 }
