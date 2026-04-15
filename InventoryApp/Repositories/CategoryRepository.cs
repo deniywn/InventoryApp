@@ -1,6 +1,7 @@
 ﻿using InventoryApp.Data;
 using InventoryApp.Models;
 using InventoryApp.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryApp.Repositories;
 
@@ -27,12 +28,23 @@ public class CategoryRepository : ICategoryRepository
 
     public void Update(Category category)
     {
+        var tracked = _context.ChangeTracker.Entries<Category>()
+            .FirstOrDefault(e => e.Entity.Id == category.Id);
+        if (tracked != null)
+            tracked.State = EntityState.Detached;
+
         _context.Categories.Update(category);
         _context.SaveChanges();
     }
 
     public void Delete(int id)
     {
+        var tracked = _context.ChangeTracker.Entries<Category>()
+            .FirstOrDefault(e => e.Entity.Id == id);
+        if (tracked != null)
+            tracked.State = EntityState.Detached;
+
+
         var cat = _context.Categories.Find(id)
             ?? throw new InvalidOperationException("Kategori tidak ditemukan.");
         _context.Categories.Remove(cat);

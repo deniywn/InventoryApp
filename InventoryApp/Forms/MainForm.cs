@@ -44,16 +44,20 @@ public partial class MainForm : Form
     //2.2 Klik menu "Categories"
     private void categoriesToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetStatus("Membuka halaman Categories...");
-        MessageBox.Show("CategoryForm akan dibuat di Tahap 8.","Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        SetStatus("Halaman Categories");
+        var form = new CategoryForm(_categoryController);
+        form.ShowDialog(this);
+        SetStatus("Siap.");
     }
     //2.3 Klik menu "Transactions"
     private void transactionsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        SetStatus("Membuka halaman Transactions...");
-        MessageBox.Show("TransactionForm akan dibuat di Tahap 8.","Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        SetStatus("Halaman Transactions");
+        var form = new TransactionForm(_transactionController);
+        form.ShowDialog(this);
+        SetStatus("Siap.");
     }
-    
+
     //3── Helper method ───────────────────────────────────────────
 
     //Menampilkan pesan di status bar bawah
