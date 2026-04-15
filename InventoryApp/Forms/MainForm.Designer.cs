@@ -32,6 +32,7 @@
             prodToolStripMenuItem = new ToolStripMenuItem();
             categoriesToolStripMenuItem = new ToolStripMenuItem();
             transactionsToolStripMenuItem = new ToolStripMenuItem();
+            repoToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             pnlContent = new Panel();
@@ -42,7 +43,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { prodToolStripMenuItem, categoriesToolStripMenuItem, transactionsToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { prodToolStripMenuItem, categoriesToolStripMenuItem, transactionsToolStripMenuItem, repoToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1082, 28);
@@ -70,6 +71,13 @@
             transactionsToolStripMenuItem.Size = new Size(108, 24);
             transactionsToolStripMenuItem.Text = " Transactions";
             transactionsToolStripMenuItem.Click += transactionsToolStripMenuItem_Click;
+            // 
+            // repoToolStripMenuItem
+            // 
+            repoToolStripMenuItem.Name = "repoToolStripMenuItem";
+            repoToolStripMenuItem.Size = new Size(74, 24);
+            repoToolStripMenuItem.Text = "Reports";
+            repoToolStripMenuItem.Click += repoToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
@@ -129,5 +137,6 @@
         private ToolStripMenuItem categoriesToolStripMenuItem;
         private ToolStripMenuItem transactionsToolStripMenuItem;
         private ToolStripStatusLabel lblStatus;
+        private ToolStripMenuItem repoToolStripMenuItem;
     }
 }

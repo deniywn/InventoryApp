@@ -11,7 +11,7 @@ public partial class MainForm : Form
     private readonly TransactionController _transactionController;
 
     //1.2 Constructor: menerima semua controller dari Program.cs
-    public MainForm( ProductController productController,CategoryController categoryController,TransactionController transactionController)
+    public MainForm(ProductController productController, CategoryController categoryController, TransactionController transactionController)
     {
         InitializeComponent(); // wajib ada — inisialisasi komponen Designer
 
@@ -64,5 +64,17 @@ public partial class MainForm : Form
     public void SetStatus(string message)
     {
         lblStatus.Text = message;
+    }
+
+    //2.4 ── Klik menu "Reports" ───────────────────────────────────────────
+    private void repoToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SetStatus("Halaman Reports");
+        var form = new ReportForm(
+            _productController,
+            _categoryController,
+            _transactionController);
+        form.ShowDialog(this);
+        SetStatus("Siap.");
     }
 }
