@@ -393,9 +393,9 @@ A: Periksa hal-hal berikut secara berurutan:
 Jika mengalami masalah yang tidak tercantum di panduan ini, hubungi:
 
 ```
-Nama    : [Nama Developer / Tim Support]
-Email   : [email@domain.com]
-Telepon : [nomor telepon]
+Nama    : Deni Yuniawan
+Email   : deniywn19@gmail.com
+Telepon : 
 ```
 
 ---
